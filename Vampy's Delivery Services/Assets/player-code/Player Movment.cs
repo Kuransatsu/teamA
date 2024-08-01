@@ -24,7 +24,7 @@ public class PlayerMovment : MonoBehaviour
     private Rigidbody2D jump;
 
     //variables for climbing
-    private bool up,down,CanClimb;
+    private bool up,down,OnLadder;
     private float y,ClimbSpeed,Climbing;
     private Rigidbody2D ClimbGravity;
     private Vector2 DirVertical;
@@ -107,7 +107,7 @@ public class PlayerMovment : MonoBehaviour
     private void JumpChecker()
     {
         OnGround = Physics2D.Raycast(transform.position, Vector2.down,0.6f, ground);
-        if (OnGround) DoubleJump = true;
+        if (OnGround||OnLadder) DoubleJump = true;
         if (Input.GetKeyDown(KeyCode.Space)&&OnGround) { force = 10;  Jump();}
         else if (Input.GetKeyDown(KeyCode.Space) && DoubleJump) {  force = 7; Jump();DoubleJump =false; }
         
@@ -125,7 +125,7 @@ public class PlayerMovment : MonoBehaviour
         if (Input.GetKey(KeyCode.W)|| Input.GetKey(KeyCode.DownArrow)) up = true;   else up = false;
         if (Input.GetKey(KeyCode.S)|| Input.GetKey(KeyCode.UpArrow)) down = true; else down = false;
 
-        if (CanClimb)
+        if (OnLadder)
         {
             if (up && down) y = 0;
             else if (up) y = 1;
@@ -134,7 +134,7 @@ public class PlayerMovment : MonoBehaviour
             DirVertical = transform.up * y;
             if (Mathf.Abs(y)>0) Climb();
         }
-        else if (!CanClimb) ClimbGravity.gravityScale = 2;
+        if (!OnLadder||Input.GetKeyDown(KeyCode.Space)) ClimbGravity.gravityScale = 2;
     }
     private void Climb()
     {
@@ -146,12 +146,12 @@ public class PlayerMovment : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Ladder")) CanClimb = true;
+        if (collision.CompareTag("Ladder")) OnLadder = true;
         
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Ladder")) CanClimb = false;
+        if (collision.CompareTag("Ladder")) OnLadder = false;
     }
 }
 

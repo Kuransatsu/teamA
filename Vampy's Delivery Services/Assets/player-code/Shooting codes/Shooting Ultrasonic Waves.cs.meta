@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: eaaa72cc4289c974a8dfb2d60bbab3c1
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - FirePoint: {instanceID: 0}
+  - UltrasonicWave: {fileID: 2046130143926318924, guid: f7428f6749b71324b95f9b3d02e78165, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
