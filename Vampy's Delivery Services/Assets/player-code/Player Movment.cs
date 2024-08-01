@@ -66,17 +66,21 @@ public class PlayerMovment : MonoBehaviour
 
     private void DashChecker()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))Dash();
+        if (Input.GetKeyDown(KeyCode.LeftShift)&&NumOfDash>0)
+        {
+            Dash();
+            NumOfDash--;
+            if (NumOfDash < 2&&NumOfDash!=0) Invoke("DashReset", 1);
+        }
+        
     }
+    private void DashReset() { NumOfDash = 2; }
     private void Dash()
     {
         speed = 100;
         Invoke("StopDash", 0.1f);
     }
-    private void StopDash()
-    {
-        speed = 4;
-    }
+    private void StopDash(){ speed = 4; }
 
     private void JumpChecker()
     {
