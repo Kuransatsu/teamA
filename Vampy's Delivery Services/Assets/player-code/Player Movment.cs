@@ -21,6 +21,10 @@ public class PlayerMovment : MonoBehaviour
     private LayerMask ground;
     private Rigidbody2D jump;
 
+    //variables for climping
+    private bool CanClimp;
+    private float y;
+
     void Start()
     {
         NumOfDash = 2;
@@ -42,9 +46,11 @@ public class PlayerMovment : MonoBehaviour
         MovmentChecker();
         DashChecker();
         JumpChecker();
-        
+        ClimpChecker();
     }
-    
+
+
+//=====================================Movement=====================================================    
     private void MovmentChecker()
     {
         if (Input.GetKey(KeyCode.D)|| Input.GetKey(KeyCode.RightArrow)) right=true;
@@ -63,7 +69,9 @@ public class PlayerMovment : MonoBehaviour
     {
         transform.Translate(dir.normalized *time* speed);
     }
+//==================================================================================================
 
+//======================================Dash========================================================
     private void DashChecker()
     {
         if (Input.GetKeyDown(KeyCode.LeftShift)&&NumOfDash>0)
@@ -81,7 +89,9 @@ public class PlayerMovment : MonoBehaviour
         Invoke("StopDash", 0.1f);
     }
     private void StopDash(){ speed = 4; }
+//==================================================================================================
 
+//========================================Jump======================================================
     private void JumpChecker()
     {
         OnGround = Physics2D.Raycast(transform.position, Vector2.down,0.6f, ground);
@@ -95,4 +105,11 @@ public class PlayerMovment : MonoBehaviour
         jump.velocity=new Vector2(jump.velocity.x,0);
         jump.AddForce(Vector2.up * force, ForceMode2D.Impulse);
     }
+//==================================================================================================
+//=========================================Climp====================================================
+    private void ClimpChecker()
+    {
+
+    }
 }
+
