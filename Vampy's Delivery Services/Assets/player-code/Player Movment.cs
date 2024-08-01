@@ -10,9 +10,9 @@ public class PlayerMovment : MonoBehaviour
     private Vector2 dir;
 
     //variables for dashing
-    private bool CanDash;
-    private float DashSpeed;
-    private Rigidbody2D Dash;
+    private int NumOfDash;
+    private Vector2 DashDir;
+    private Rigidbody2D dash;
 
 
     //variables for jumping
@@ -23,11 +23,11 @@ public class PlayerMovment : MonoBehaviour
 
     void Start()
     {
+        NumOfDash = 2;
         ground = LayerMask.GetMask("ground");
         speed = 4;
-        DashSpeed = 6;
         jump = GetComponent<Rigidbody2D>();
-        Dash = GetComponent<Rigidbody2D>();
+        dash = GetComponent<Rigidbody2D>();
     }
 
    
@@ -36,6 +36,7 @@ public class PlayerMovment : MonoBehaviour
         time = Time.deltaTime;
         InputChecker();
     }
+    
     private void InputChecker()
     {
         MovmentChecker();
@@ -43,10 +44,7 @@ public class PlayerMovment : MonoBehaviour
         JumpChecker();
         
     }
-    private void DashChecker()
-    {
-
-    }
+    
     private void MovmentChecker()
     {
         if (Input.GetKey(KeyCode.D)|| Input.GetKey(KeyCode.RightArrow)) right=true;
@@ -66,17 +64,31 @@ public class PlayerMovment : MonoBehaviour
         transform.Translate(dir.normalized *time* speed);
     }
 
+    private void DashChecker()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift))Dash();
+    }
+    private void Dash()
+    {
+        speed = 100;
+        Invoke("StopDash", 0.1f);
+    }
+    private void StopDash()
+    {
+        speed = 4;
+    }
+
     private void JumpChecker()
     {
         OnGround = Physics2D.Raycast(transform.position, Vector2.down,0.6f, ground);
         if (OnGround) DoubleJump = true;
         if (Input.GetKeyDown(KeyCode.Space)&&OnGround) { force = 10;  Jump();}
-        else if (Input.GetKeyDown(KeyCode.Space) && DoubleJump) {  force = 7; Jump();}
+        else if (Input.GetKeyDown(KeyCode.Space) && DoubleJump) {  force = 7; Jump();DoubleJump =false; }
         
     }
     private void Jump()
     {
-        jump.velocity=Vector2.zero;
+        jump.velocity=new Vector2(jump.velocity.x,0);
         jump.AddForce(Vector2.up * force, ForceMode2D.Impulse);
     }
 }
