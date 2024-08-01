@@ -22,15 +22,16 @@ public class Trident : MonoBehaviour
     {
         MousePos = Camera.ScreenToWorldPoint(Input.mousePosition);
         LookDir = (MousePos - AimTransform.position);
+        print(LookDir.x);
         if (LookDir.x > 0)
         {
-            Quaternion target = Quaternion.Euler(0, 0, -30);
-            transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime);
+            Quaternion target = Quaternion.Euler(0, 0, -90);
+            transform.rotation = Quaternion.Slerp(transform.rotation, target, 0.8f*Time.deltaTime);
         }
         else
         {
-            Quaternion target = Quaternion.Euler(-30, 0, 0);
-            transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime);
+            Quaternion target = Quaternion.Euler(0, 0, 90);
+            transform.rotation = Quaternion.Slerp(transform.rotation, target, 0.8f*Time.deltaTime);
         }
      
         
