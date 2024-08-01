@@ -39,6 +39,6 @@ public class ShootingUltrasonicWaves : MonoBehaviour
         Bullet.active=true;
         BulletRB = Bullet.GetComponent<Rigidbody2D>();
         BulletRB.AddForce(FirePoint.right *UltrasonicWaveForce,ForceMode2D.Impulse);
-        Destroy(Bullet,1f);
+        //Destroy(Bullet,1f);
     }
 }
