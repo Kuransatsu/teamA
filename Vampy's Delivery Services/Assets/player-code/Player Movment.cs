@@ -8,7 +8,7 @@ public class PlayerMovment : MonoBehaviour
     //variables for the movment
     private float x, speed, time;
     private bool left , right;
-    private Vector2 dir;
+    private Vector2 DirHorizontal;
 
     //variables for dashing
     private int NumOfDash;
@@ -23,18 +23,22 @@ public class PlayerMovment : MonoBehaviour
     private LayerMask ground;
     private Rigidbody2D jump;
 
-    //variables for climping
-    private bool CanClimp;
-    private float y;
+    //variables for climbing
+    private bool up,down,CanClimb;
+    private float y,ClimbSpeed,Climbing;
+    private Rigidbody2D ClimbGravity;
+    private Vector2 DirVertical;
 
     void Start()
     {
         NumOfDash = 2;
         ground = LayerMask.GetMask("ground");
-        speed = 4;
+        speed = 10;
+        ClimbSpeed = 7;
         jump = GetComponent<Rigidbody2D>();
         dash = GetComponent<Rigidbody2D>();
         DashTrail = GetComponent<TrailRenderer>();
+        ClimbGravity = GetComponent<Rigidbody2D>();
     }
 
    
@@ -49,7 +53,7 @@ public class PlayerMovment : MonoBehaviour
         MovmentChecker();
         DashChecker();
         JumpChecker();
-        ClimpChecker();
+        ClimbChecker();
     }
 
 
@@ -65,12 +69,12 @@ public class PlayerMovment : MonoBehaviour
         else if (right) x = 1;
         else if (left) x = -1;
         else x = 0;
-        dir = transform.right * x;
+        DirHorizontal = transform.right * x;
         move();
     }
     private void move()
     {
-        transform.Translate(dir.normalized *time* speed);
+        transform.Translate(DirHorizontal.normalized *time* speed);
     }
 //==================================================================================================
 
@@ -115,11 +119,39 @@ public class PlayerMovment : MonoBehaviour
     }
 //==================================================================================================
 
-//=========================================Climp====================================================
-    private void ClimpChecker()
+//=========================================Climb====================================================
+    private void ClimbChecker()
     {
+        if (Input.GetKey(KeyCode.W)|| Input.GetKey(KeyCode.DownArrow)) up = true;   else up = false;
+        if (Input.GetKey(KeyCode.S)|| Input.GetKey(KeyCode.UpArrow)) down = true; else down = false;
 
+        if (CanClimb)
+        {
+            if (up && down) y = 0;
+            else if (up) y = 1;
+            else if (down) y = -1;
+            else y = 0;
+            DirVertical = transform.up * y;
+            if (Mathf.Abs(y)>0) Climb();
+        }
+        else if (!CanClimb) ClimbGravity.gravityScale = 2;
     }
-//==================================================================================================
+    private void Climb()
+    {
+        ClimbGravity.gravityScale = 0;
+        ClimbGravity.velocity = Vector2.zero;
+        transform.Translate(DirVertical.normalized * ClimbSpeed * time);
+    }
+    //==================================================================================================
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Ladder")) CanClimb = true;
+        
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Ladder")) CanClimb = false;
+    }
 }
 
