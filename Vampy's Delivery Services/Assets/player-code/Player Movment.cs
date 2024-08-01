@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class PlayerMovment : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class PlayerMovment : MonoBehaviour
     private int NumOfDash;
     private Vector2 DashDir;
     private Rigidbody2D dash;
+    private TrailRenderer DashTrail;
 
 
     //variables for jumping
@@ -32,6 +34,7 @@ public class PlayerMovment : MonoBehaviour
         speed = 4;
         jump = GetComponent<Rigidbody2D>();
         dash = GetComponent<Rigidbody2D>();
+        DashTrail = GetComponent<TrailRenderer>();
     }
 
    
@@ -76,19 +79,24 @@ public class PlayerMovment : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.LeftShift)&&NumOfDash>0)
         {
+            if (right && left) return;
+            else if (right) DashDir = Vector2.right;
+            else if (left) DashDir = Vector2.left;
             Dash();
             NumOfDash--;
             if (NumOfDash < 2&&NumOfDash!=0) Invoke("DashReset", 1);
         }
         
     }
-    private void DashReset() { NumOfDash = 2; }
     private void Dash()
     {
-        speed = 100;
+        DashTrail.enabled=true;
+        dash.AddForce(DashDir*100,ForceMode2D.Impulse);
         Invoke("StopDash", 0.1f);
     }
-    private void StopDash(){ speed = 4; }
+    private void DashReset() { NumOfDash = 2; }
+    
+    private void StopDash(){ dash.velocity=Vector2.zero; DashTrail.enabled = false; }
 //==================================================================================================
 
 //========================================Jump======================================================
