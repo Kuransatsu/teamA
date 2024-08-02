@@ -11,11 +11,13 @@ public class PlayerMovment : MonoBehaviour
     private Vector2 DirHorizontal;
 
     //variables for dashing
+    private bool Dright,Dleft;
     private int NumOfDash;
+    private CapsuleCollider2D DashCollider;
     private Vector2 DashDir;
     private Rigidbody2D dash;
     private TrailRenderer DashTrail;
-    private BoxCollider2D Enemy;
+    private LayerMask Enemy;
 
 
     //variables for jumping
@@ -46,7 +48,6 @@ public class PlayerMovment : MonoBehaviour
         dash = GetComponent<Rigidbody2D>();
         DashTrail = GetComponent<TrailRenderer>();
         NumOfDash = 2;
-        Enemy =GameObject.FindGameObjectWithTag("Enemy").GetComponent<BoxCollider2D>();
     }
 
    
@@ -78,6 +79,7 @@ public class PlayerMovment : MonoBehaviour
         else if (left) x = -1;
         else x = 0;
         DirHorizontal = transform.right * x;
+        
         move();
     }
     private void move()
@@ -89,6 +91,8 @@ public class PlayerMovment : MonoBehaviour
 //======================================Dash========================================================
     private void DashChecker()
     {
+        if (!DashTrail.enabled) dash.velocity = new Vector2(0, dash.velocity.y);
+
         if (Input.GetKeyDown(KeyCode.LeftShift)&&NumOfDash>0)
         {
             if (right && left) return;
@@ -98,10 +102,12 @@ public class PlayerMovment : MonoBehaviour
             NumOfDash--;
             if (NumOfDash < 2&&NumOfDash!=0) Invoke("DashReset", 1);
         }
+
         
     }
     private void Dash()
     {
+        
         DashTrail.enabled=true;
         dash.AddForce(DashDir*100,ForceMode2D.Impulse);
         Invoke("StopDash", 0.1f);
