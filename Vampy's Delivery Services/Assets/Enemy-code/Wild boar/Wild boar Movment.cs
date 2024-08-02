@@ -7,8 +7,8 @@ public class WildboarMovment : MonoBehaviour
     [SerializeField]
     private float speed, fliper, time,DashTimer;
     private Vector2 dir;
-    private BoxCollider2D groundChecker;
-    private bool playerChecekr, WallChecker, DashMode,Dash,behaindChecker;
+    
+    private bool playerChecekr, WallChecker, DashMode,Dash,behaindChecker,onGround;
     private LayerMask wall,Player;
     private Rigidbody2D Rdash;
     void Start()
@@ -20,7 +20,7 @@ public class WildboarMovment : MonoBehaviour
         speed = 3;
         wall = LayerMask.GetMask("ground");
         Player = LayerMask.GetMask("Player");
-        groundChecker =GetComponentInChildren<BoxCollider2D>();
+        
         fliper = 1;
     }
 
@@ -41,7 +41,7 @@ public class WildboarMovment : MonoBehaviour
         if (WallChecker||behaindChecker) { print("a"); flip(); }
         if (playerChecekr) speed = 5;
         else { speed=3; }
-        if (!DashMode)Rdash.velocity = Vector2.right*dir*speed;
+        if (!DashMode&&onGround)Rdash.velocity = Vector2.right*dir*speed;
         if (Dash&&DashTimer<=0)dash();
     }
     private void dash()
@@ -56,9 +56,13 @@ public class WildboarMovment : MonoBehaviour
         DashMode=false;
         Rdash.velocity = Vector2.zero;
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("ground")) onGround = true;
+    }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("ground")) { print("s"); Invoke("flip", 0.1f); }
+        if (collision.CompareTag("ground")) { print("s"); Invoke("flip", 0.1f); onGround = false; }
     }
     private void flip()
     {
