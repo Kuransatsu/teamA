@@ -8,7 +8,14 @@ public class BulletChoose : MonoBehaviour
     public string BulletName;
     private void Awake()
     {
-        BulletName = "Trident";
+        if (T)
+        {
+            BulletName = "Trident";
+        }
+        if (U)
+        {
+            BulletName = "UltrasonicWave";
+        }
     }
     private void Update()
     {

@@ -4,20 +4,22 @@ using UnityEngine;
 
 public class Trident : MonoBehaviour
 {
+    private TridentShooting Relode;
     private Camera Camera;
     private Vector3 MousePos;
     private Vector2 LookDir;
     private float angle;
     private Transform AimTransform;
-
+    
 
     void Start()
     {
+        Relode =GameObject.Find("Vamby").GetComponent<TridentShooting>();
         Camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         AimTransform = GameObject.Find("Aim").GetComponentInParent<Transform>();
         MousePos = Camera.ScreenToWorldPoint(Input.mousePosition);
         LookDir = (MousePos - AimTransform.position);
-        print(LookDir.x);
+        
     }
 
     // Update is called once per frame
@@ -26,13 +28,13 @@ public class Trident : MonoBehaviour
         
         if (LookDir.x > 0)
         {
-            print('1');
+            
             Quaternion target = Quaternion.Euler(0, 0, -90);
             transform.rotation = Quaternion.Slerp(transform.rotation, target, 0.8f*Time.deltaTime);
         }
         if (LookDir.x < 0) 
         {
-            print('2');
+           
             Quaternion target = Quaternion.Euler(0, 0, 270);
             transform.rotation = Quaternion.Slerp(transform.rotation, target, 0.8f*Time.deltaTime);
         }
@@ -40,9 +42,10 @@ public class Trident : MonoBehaviour
         
     }
 
-    
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Relode.relode();
         Destroy(gameObject);
     }
 }
