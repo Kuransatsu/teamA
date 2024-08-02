@@ -5,26 +5,20 @@ using UnityEngine;
 
 public class TridentShooting : MonoBehaviour
 {
-    BulletChoose Bu;
+    
     
     private Transform FirePoint;
-    private GameObject BulletPre;
-    private GameObject Trident;
+    [SerializeField]
+    private GameObject Trient;
     private GameObject Bullet;
     private Rigidbody2D BulletRB;
-    [SerializeField]
     private bool canShoot;
-    private string BulletName;
-    private float UltrasonicWaveForce;
+    private float TridentForce;
 
     void Start()
     { 
-        Bu = GameObject.Find("yay").GetComponent<BulletChoose>();
-        BulletName = Bu.BulletName;
-        BulletPre = GameObject.Find("Trident");
         FirePoint = GameObject.Find("FirePoint").GetComponent<Transform>();
-        BulletPre.active = false;
-        UltrasonicWaveForce = 50;
+        TridentForce = 50;
         canShoot =true;
     }
 
@@ -39,10 +33,9 @@ public class TridentShooting : MonoBehaviour
     private void Shoot()
     {
         
-        Bullet = Instantiate(BulletPre, FirePoint.position, FirePoint.rotation);
-        Bullet.active = true;
+        Bullet = Instantiate(Trient, FirePoint.position, FirePoint.rotation);
         BulletRB = Bullet.GetComponent<Rigidbody2D>();
-        BulletRB.AddForce(FirePoint.right * UltrasonicWaveForce, ForceMode2D.Impulse);
+        BulletRB.AddForce(FirePoint.right * TridentForce, ForceMode2D.Impulse);
         Destroy(Bullet, 1f);
         Invoke("relode", 1f);
     }

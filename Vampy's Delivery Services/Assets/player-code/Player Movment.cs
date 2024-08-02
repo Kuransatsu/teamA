@@ -15,6 +15,7 @@ public class PlayerMovment : MonoBehaviour
     private Vector2 DashDir;
     private Rigidbody2D dash;
     private TrailRenderer DashTrail;
+    private BoxCollider2D Enemy;
 
 
     //variables for jumping
@@ -31,14 +32,21 @@ public class PlayerMovment : MonoBehaviour
 
     void Start()
     {
-        NumOfDash = 2;
+        
         ground = LayerMask.GetMask("ground");
         speed = 10;
+
+
         ClimbSpeed = 7;
+        ClimbGravity = GetComponent<Rigidbody2D>();
+
         jump = GetComponent<Rigidbody2D>();
+
+
         dash = GetComponent<Rigidbody2D>();
         DashTrail = GetComponent<TrailRenderer>();
-        ClimbGravity = GetComponent<Rigidbody2D>();
+        NumOfDash = 2;
+        Enemy =GameObject.FindGameObjectWithTag("Enemy").GetComponent<BoxCollider2D>();
     }
 
    
@@ -106,7 +114,7 @@ public class PlayerMovment : MonoBehaviour
 //========================================Jump======================================================
     private void JumpChecker()
     {
-        OnGround = Physics2D.Raycast(transform.position, Vector2.down,0.6f, ground);
+        OnGround = Physics2D.Raycast(transform.position, Vector2.down,1.1f, ground);
         if (OnGround||OnLadder) DoubleJump = true;
         if (Input.GetKeyDown(KeyCode.Space)&&OnGround) { force = 10;  Jump();}
         else if (Input.GetKeyDown(KeyCode.Space) && DoubleJump) {  force = 7; Jump();DoubleJump =false; }

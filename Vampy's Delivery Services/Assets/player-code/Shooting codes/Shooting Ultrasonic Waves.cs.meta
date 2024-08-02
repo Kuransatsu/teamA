@@ -4,8 +4,7 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - FirePoint: {instanceID: 0}
-  - UltrasonicWave: {fileID: 2046130143926318924, guid: f7428f6749b71324b95f9b3d02e78165, type: 3}
+  - UltrasonicWave: {fileID: 4311649173207926553, guid: 9b3da8eaf2d3eb74883f23d6a2ceb60b, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

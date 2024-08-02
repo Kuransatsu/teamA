@@ -21,6 +21,7 @@ public class Trident : MonoBehaviour
         LookDir = (MousePos - AimTransform.position);
         
     }
+    
 
     // Update is called once per frame
     void Update()
