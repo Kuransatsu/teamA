@@ -11,10 +11,13 @@ public class PlayerMovment : MonoBehaviour
     private Vector2 DirHorizontal;
 
     //variables for dashing
+    private bool Dright,Dleft;
     private int NumOfDash;
+    private CapsuleCollider2D DashCollider;
     private Vector2 DashDir;
     private Rigidbody2D dash;
     private TrailRenderer DashTrail;
+    private LayerMask Enemy;
 
 
     //variables for jumping
@@ -31,14 +34,20 @@ public class PlayerMovment : MonoBehaviour
 
     void Start()
     {
-        NumOfDash = 2;
+        
         ground = LayerMask.GetMask("ground");
         speed = 10;
+
+
         ClimbSpeed = 7;
+        ClimbGravity = GetComponent<Rigidbody2D>();
+
         jump = GetComponent<Rigidbody2D>();
+
+
         dash = GetComponent<Rigidbody2D>();
         DashTrail = GetComponent<TrailRenderer>();
-        ClimbGravity = GetComponent<Rigidbody2D>();
+        NumOfDash = 2;
     }
 
    
@@ -70,6 +79,7 @@ public class PlayerMovment : MonoBehaviour
         else if (left) x = -1;
         else x = 0;
         DirHorizontal = transform.right * x;
+        
         move();
     }
     private void move()
@@ -81,6 +91,8 @@ public class PlayerMovment : MonoBehaviour
 //======================================Dash========================================================
     private void DashChecker()
     {
+        if (!DashTrail.enabled) dash.velocity = new Vector2(0, dash.velocity.y);
+
         if (Input.GetKeyDown(KeyCode.LeftShift)&&NumOfDash>0)
         {
             if (right && left) return;
@@ -90,10 +102,12 @@ public class PlayerMovment : MonoBehaviour
             NumOfDash--;
             if (NumOfDash < 2&&NumOfDash!=0) Invoke("DashReset", 1);
         }
+
         
     }
     private void Dash()
     {
+        
         DashTrail.enabled=true;
         dash.AddForce(DashDir*100,ForceMode2D.Impulse);
         Invoke("StopDash", 0.1f);
@@ -106,7 +120,7 @@ public class PlayerMovment : MonoBehaviour
 //========================================Jump======================================================
     private void JumpChecker()
     {
-        OnGround = Physics2D.Raycast(transform.position, Vector2.down,0.6f, ground);
+        OnGround = Physics2D.Raycast(transform.position, Vector2.down,1.1f, ground);
         if (OnGround||OnLadder) DoubleJump = true;
         if (Input.GetKeyDown(KeyCode.Space)&&OnGround) { force = 10;  Jump();}
         else if (Input.GetKeyDown(KeyCode.Space) && DoubleJump) {  force = 7; Jump();DoubleJump =false; }

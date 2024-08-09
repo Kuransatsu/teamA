@@ -1,10 +1,9 @@
 fileFormatVersion: 2
-guid: eaaa72cc4289c974a8dfb2d60bbab3c1
+guid: 575bd5b3410931b4494f7b460aef0490
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - UltrasonicWave: {fileID: 4311649173207926553, guid: 9b3da8eaf2d3eb74883f23d6a2ceb60b, type: 3}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
