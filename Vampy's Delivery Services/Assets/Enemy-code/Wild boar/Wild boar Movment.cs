@@ -7,12 +7,15 @@ public class WildboarMovment : MonoBehaviour
     [SerializeField]
     private float speed, fliper, time,DashTimer;
     private Vector2 dir;
+    private SpriteRenderer sprite;
     
     private bool playerChecekr, WallChecker, DashMode,Dash,behaindChecker,onGround;
     private LayerMask wall,Player;
     private Rigidbody2D Rdash;
     void Start()
     {
+        sprite = GetComponent<SpriteRenderer>();
+        sprite.flipX = true;
         playerChecekr = false;
         WallChecker = false;
         Dash=false;
@@ -29,13 +32,13 @@ public class WildboarMovment : MonoBehaviour
     { 
         time=Time.deltaTime;
         if (DashTimer >0)DashTimer-=time;
-        WallChecker = Physics2D.Raycast(transform.position, Vector2.right , 0.6f*fliper, wall);
+        WallChecker = Physics2D.Raycast(transform.position, Vector2.right , 0.8f*fliper, wall);
         playerChecekr = Physics2D.Raycast(transform.position, Vector2.right , 12 * fliper, Player);
         Dash = Physics2D.Raycast(transform.position, Vector2.right , 10 * fliper, Player);
         behaindChecker = Physics2D.Raycast(transform.position, Vector2.left, 2 * fliper, Player);
         Debug.DrawRay(transform.position,Vector2.right*12 * fliper, Color.red);
         Debug.DrawRay(transform.position, Vector2.right * 10 * fliper, Color.yellow);
-        Debug.DrawRay(transform.position, Vector2.right*0.6f * fliper, Color.blue);
+        Debug.DrawRay(transform.position, Vector2.right*0.8f * fliper, Color.blue);
         Debug.DrawRay(transform.position, Vector2.left * 2 * fliper, Color.black);
         dir = transform.right * fliper;
         if (WallChecker||behaindChecker) { print("a"); flip(); }
